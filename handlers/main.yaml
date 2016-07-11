@@ -4,4 +4,6 @@
   service:
     name: oddjobd
     state: restarted
-  when: not oddjob_service_started.changed
+  when: >
+    oddjob_service_started is not defined or
+    not oddjob_service_started.changed

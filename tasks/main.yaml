@@ -4,6 +4,8 @@
   assert:
     that: >
       ansible_os_family == "RedHat"
+  tags:
+    - oddjob_assert
 
 - name: Install oddjob package for RedHat
   yum:
@@ -27,19 +29,10 @@
 - name: Configure oddjob service
   template:
     src: oddjobd.conf.j2
-    dest: /etc/oddjobd.conf
+    dest: "{{ oddjob_config_file }}"
   notify:
     - Restart oddjobd
   tags:
-    - oddjob_config
-
-- name: Make sure oddjobd service is running
-  service:
-    name: oddjobd
-    state: started
-  register: oddjob_service_started
-  tags:
-    - oddjob_pkg
     - oddjob_config
 
 - name: Make sure oddjobd service is enabled
@@ -47,4 +40,12 @@
     name: oddjobd
     enabled: yes
   tags:
-    - oddjob_config
+    - oddjob_service
+
+- name: Make sure oddjobd service is running
+  service:
+    name: oddjobd
+    state: started
+  register: oddjob_service_started
+  tags:
+    - oddjob_service

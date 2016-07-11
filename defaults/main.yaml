@@ -6,20 +6,153 @@ oddjob_pkg: oddjob
 # Helper packages to be installed (you can force a specific version here)
 oddjob_helper_pkg: []
 
+# Path to the config file
+oddjob_config_file: /etc/oddjobd.conf
+
+
+# Default listall interface method of the service section
+oddjob_config_service_interface_method_listall__default:
+  - allow:
+    - ^min_uid: 0
+    - ^max_uid: 0
+
+# Custom listall interface method of the service section
+oddjob_config_service_interface_method_listall__custom: []
+
+oddjob_config_service_interface_method_listall_opts:
+  - ^name: listall
+
+# Final listall interface method of the service section
+oddjob_config_service_interface_method_listall:
+  - mehod: "{{
+      oddjob_config_service_interface_method_listall_opts +
+      oddjob_config_service_interface_method_listall__default +
+      oddjob_config_service_interface_method_listall__custom
+    }}"
+
+
+# Default list interface method of the service section
+oddjob_config_service_interface_method_list__default:
+  - allow: ''
+
+# Custom list interface method of the service section
+oddjob_config_service_interface_method_list__custom: []
+
+oddjob_config_service_interface_method_list_opts:
+  - '^name': list
+
+# Final list interface method of the service section
+oddjob_config_service_interface_method_list:
+  - method: "{{
+      oddjob_config_service_interface_method_list_opts +
+      oddjob_config_service_interface_method_list__default +
+      oddjob_config_service_interface_method_list__custom
+    }}"
+
+
+# Default quit interface method of the service section
+oddjob_config_service_interface_method_quit__default:
+  - allow:
+    - ^user: root
+
+# Custom quit interface method of the service section
+oddjob_config_service_interface_method_quit__custom: []
+
+oddjob_config_service_interface_method_quit_opts:
+  - ^name: quit
+
+# Final quit interface method of the service section
+oddjob_config_service_interface_method_quit:
+  - method: "{{
+      oddjob_config_service_interface_method_quit_opts +
+      oddjob_config_service_interface_method_quit__default +
+      oddjob_config_service_interface_method_quit__custom
+    }}"
+
+
+# Default reload interface method of the service section
+oddjob_config_service_interface_method_reload__default:
+  - allow:
+    - ^user: root
+
+# Custom reload interface method of the service section
+oddjob_config_service_interface_method_reload__custom: []
+
+# Options of the reload interface method of the service section
+oddjob_config_service_interface_method_reload_opts:
+  - ^name: reload
+
+# Final reload interface method of the service section
+oddjob_config_service_interface_method_reload:
+  - method: "{{
+      oddjob_config_service_interface_method_reload_opts +
+      oddjob_config_service_interface_method_reload__default +
+      oddjob_config_service_interface_method_reload__custom
+    }}"
+
+
+# Options of the service section
+oddjob_config_service_opts:
+  - ^name: com.redhat.oddjob
+
+# Default service section
+oddjob_config_service__default:
+  - ^name: com.redhat.oddjob
+  - object:
+    - ^name: /com/redhat/oddjob
+    - interface: "{{
+        oddjob_config_service_opts +
+        oddjob_config_service_interface_method_listall +
+        oddjob_config_service_interface_method_list +
+        oddjob_config_service_interface_method_quit +
+        oddjob_config_service_interface_method_reload
+      }}"
+
+# Custom service section
+oddjob_config_service__custom: []
+
+# Inner part of the service section
+oddjob_config_service__inner: "{{
+  oddjob_config_service__default +
+  oddjob_config_service__custom
+}}"
+
+# Final service section
+oddjob_config_service:
+  - service: "{{ oddjob_config_service__inner }}"
+
+
+# Default list of includes
+oddjob_config_include__default:
+  - include:
+    - ^ignore_missing: "yes"
+    - /etc/oddjobd.conf.d/*.conf
+  - include:
+    - ^ignore_missing: "yes"
+    - /etc/oddjobd-local.conf
+
+# Custom list of includes
+oddjob_config_include__custom: []
+
+# Final list of includes
+oddjob_config_include: "{{
+  oddjob_config_include__default +
+  oddjob_config_include__custom
+}}"
+
+
 # Default jobd config
-oddjob_config:
-  oddjobconfig:
-    'service name="com.redhat.oddjob"':
-      'object name="/com/redhat/oddjob"':
-        'interface name="com.redhat.oddjob"':
-          'method name="listall"':
-            'allow min_uid="0" max_uid="0"': null
-          'method name="list"':
-            allow: null
-          'method name="quit"':
-            'allow user="root"': null
-          'method name="reload"':
-            'allow user="root"': null
-    'include ignore_missing="yes"':
-      - /etc/oddjobd.conf.d/*.conf
-      - /etc/oddjobd-local.conf
+oddjob_config__default:
+  - oddjobconfig: "{{
+      oddjob_config_service +
+      oddjob_config_include
+    }}"
+
+# Custom jobd config
+oddjob_config__custom: []
+
+# Final jobd config
+oddjob_config: "{{
+  oddjob_config__default +
+  oddjob_config__custom
+}}"
