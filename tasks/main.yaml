@@ -20,7 +20,7 @@
   yum:
     name: "{{ item }}"
     state: present
-  with_items: oddjob_helper_pkg
+  with_items: "{{ oddjob_helper_pkg }}"
   notify:
     - Restart oddjobd
   tags:
