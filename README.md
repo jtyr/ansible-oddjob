@@ -28,7 +28,7 @@ Examples
   hosts: myhost2
   vars:
     # Install oddjob-mkhomedir package
-    oddjob_helper:
+    oddjob_helper_pkgs:
       - oddjob-mkhomedir
   roles:
     - oddjob
@@ -56,7 +56,7 @@ List of variables used by the role:
 oddjob_pkg: oddjob
 
 # Helper packages to be installed (you can force a specific version here)
-oddjob_helper_pkg: []
+oddjob_helper_pkgs: []
 
 # Path to the config file
 oddjob_config_file: /etc/oddjobd.conf

@@ -4,7 +4,7 @@
 oddjob_pkg: oddjob
 
 # Helper packages to be installed (you can force a specific version here)
-oddjob_helper_pkg: []
+oddjob_helper_pkgs: []
 
 # Path to the config file
 oddjob_config_file: /etc/oddjobd.conf
