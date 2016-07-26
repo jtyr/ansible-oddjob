@@ -24,7 +24,7 @@ oddjob_config_service_interface_method_listall_opts:
 
 # Final listall interface method of the service section
 oddjob_config_service_interface_method_listall:
-  - mehod: "{{
+  - method: "{{
       oddjob_config_service_interface_method_listall_opts +
       oddjob_config_service_interface_method_listall__default +
       oddjob_config_service_interface_method_listall__custom
