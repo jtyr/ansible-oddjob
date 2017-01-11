@@ -8,18 +8,16 @@
     - oddjob_assert
 
 - name: Install oddjob package for RedHat
-  yum:
+  package:
     name: "{{ oddjob_pkg }}"
-    state: present
   notify:
     - Restart oddjobd
   tags:
     - oddjob_pkg
 
 - name: Install oddjob helper package for RedHat
-  yum:
+  package:
     name: "{{ item }}"
-    state: present
   with_items: "{{ oddjob_helper_pkgs }}"
   notify:
     - Restart oddjobd
